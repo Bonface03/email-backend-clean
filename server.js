@@ -16,7 +16,7 @@ app.post("/send-email", async (req, res) => {
 
   const msg = {
     to: email,
-    from: "your_verified_sender@example.com", // Replace with your verified sender
+    from: "mrbonface.02@gmail.com", // Replace with your verified sender
     subject,
     html: htmlBody,
   };
@@ -37,3 +37,4 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
