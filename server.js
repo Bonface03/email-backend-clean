@@ -50,11 +50,20 @@ app.get("/", (req, res) => {
 cron.schedule("0 8 * * *", async () => {
   console.log("⏰ Running daily service reminder job...");
 
-  const recipients = [
-    "service@utanoafrica.com",
-    "learnmorebmusikiri@gmail.com",
-    "service1@utanoafrica.com",
-  ];
+  let recipients = ["service@hospital.com"]; // Safe fallback default
+  try {
+    const settingsDoc = await db.collection("hospitals").doc("emailSettings").get();
+    if (settingsDoc.exists && settingsDoc.data().emails) {
+      recipients = settingsDoc.data().emails;
+    }
+  } catch (err) {
+    console.error("Failed to fetch custom custom recipients list, using default:", err);
+  }
+
+  if (recipients.length === 0) {
+    console.log("No recipient emails configured in the system. Skipping email dispatches.");
+    return;
+  }
 
   try {
     const today = new Date();
